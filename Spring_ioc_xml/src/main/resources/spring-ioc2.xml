@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+
+<!--
+    bean作用域,使用 scope="singleton" 单例模式，同一个id始终只会创建一次bean Test03
+    scope="singleton" 多例模式，同一个id会创建多个bean Test04
+-->
+    <bean class="com.sunny.beans.Order" id="order" name="order" scope="singleton">
+    </bean>
+
+    <!--ioc加载是顺序加载，但使用 depends-on 可以使 role 先于 user 先加载-->
+    <!--<bean class="com.sunny.beans.User" id="user" name="user" depends-on="role"></bean>
+    <bean class="com.sunny.beans.Role" id="role" name="role"></bean>-->
+
+    <!--懒加载:初始化的时候 user并不会加载到 ioc容器中，lazy-init="true"只有使用的时候才会加载-->
+   <!-- <bean class="com.sunny.beans.User" id="user" name="user" lazy-init="true"></bean>-->
+
+    <!--自动注入,autowire="byType",byName,constructor  Test05-->
+    <bean class="com.sunny.beans.User" id="user" name="user" autowire="byType"></bean>
+
+    <bean class="com.sunny.beans.Role" id="role" name="role"></bean>
+
+    <!--加载外部配置文件,在加载外部依赖文件的时候需要context命名空间-->
+    <context:properties location="bd.properties" id="dbp"/>
+    <!--创建第三方Bean  Test06-->
+    <bean class="com.alibaba.druid.pool.DruidDataSource" id="dataSource">
+        <property name="username" value="${mysql.username}"></property>
+        <property name="password" value="${mysql.password}"></property>
+        <property name="url" value="${mysql.url}"></property>
+        <property name="driverClassName" value="${mysql.driverClassName}"></property>
+    </bean>
+
+
+    
+
+
+</beans>

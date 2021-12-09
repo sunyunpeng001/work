@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--依赖注入 start-->
+
+    <!--设置别名-->
+    <alias name="user" alias="user2"></alias>
+    <!--也可以通过name来设置别名-->
+    <bean class="com.sunny.beans.User" id="user" name="user3"></bean>
+
+    <!--使用import可以导入其他的配置文件，例如多个 xml文件，各个文件对应不同的模块-->
+    <import resource="spring-ioc2.xml"></import>
+
+    <!--    依赖注入，基于set方式，注意name的值实际是与set方法的那个是一致的，例如setUserName name = "userAge"-->
+    <bean class="com.sunny.beans.User" id="user4">
+        <property name="userName" value="孙允鹏"></property>
+        <property name="userAge" value="18"></property>
+    </bean>
+
+    <!--    依赖注入，基于构造方法注入,注意 constructor-arg 注入必须与构造方法的参数个数一致-->
+    <bean class="com.sunny.beans.Role" id="Role" name="role">
+       <constructor-arg name="roleId" value="1"/>
+        <constructor-arg name="roleName" value="企E贷"/>
+    </bean>
+
+    <!--    复杂数据类型的引用-->
+    <bean class="com.sunny.beans.User" id="user5" name="user5">
+        <property name="userName" value="孙允鹏5"></property>
+        <property name="userAge" value="5"></property>
+        <property name="role" ref="role"></property>
+        <property name="hobby">
+           <list>
+               <value>唱歌</value>
+               <value>跳舞</value>
+           </list>
+        </property>
+    </bean>
+    <!--    使用P命名空间注入-->
+    <bean class="com.sunny.beans.User" id="user6" name="user6" p:userAge="11" p:userName="测试p命名空间" p:role-ref="role"></bean>
+
+
+    <!--依赖注入 end-->
+
+
+
+</beans>
