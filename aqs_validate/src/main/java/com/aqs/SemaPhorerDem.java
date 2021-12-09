@@ -35,7 +35,6 @@ public class SemaPhorerDem {
                             System.out.println(Thread.currentThread().getName()+": "+"到窗口开始买票");
                             Thread.sleep(3000);
                             System.out.println(Thread.currentThread().getName()+": "+"买票完成");
-
                         }catch (Exception e){}
                         //释放锁
                         semaphore.release();
