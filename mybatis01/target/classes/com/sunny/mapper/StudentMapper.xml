@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunny.mapper.StudentMapper">
+    <cache></cache>
+    <resultMap id="student" type="com.sunny.pojo.Student"></resultMap>
+
+    <!--根据id查询Student实体-->
+    <select id="getStudent" resultMap="student">
+        select * from Student where id = #{id}
+    </select>
+
+    <!--flushCache="false" 默认该命名空间执行增删改后，该查询的二级缓存不进行清空
+                true表示 该命名空间执行增删改后，该查询的二级缓存会清空
+         useCache="true" 默认使用缓存，false不使用缓存
+                -->
+
+    <select id="queryStudent"  resultMap="student" flushCache="true">
+        select * from Student
+        where 1=1
+        <if test="id != null and id != ''">
+            and id = #{id}
+        </if>
+        <if test="name != null and name != ''">
+            and name = #{name}
+        </if>
+
+    </select>
+
+    <select id="getStudentTotal" resultType="java.lang.Long">
+        select count(1) from Student
+    </select>
+
+    <!--flushCache="true" 默认该命名空间执行增删改后，该查询的二级缓存会清空
+                false表示 该命名空间执行增删改后，该查询的二级缓存不进行清空
+         useCache="true" 默认使用缓存，false不使用缓存
+                -->
+    <insert id="insetStudent" flushCache="true">
+        insert into Student(name) value (#{name})
+    </insert>
+
+    <select id="queryPageStudent" resultMap="student">
+        select * from student
+    </select>
+
+    <select id="queryPageParamStudent" resultMap="student">
+        select * from student
+    </select>
+
+
+</mapper>

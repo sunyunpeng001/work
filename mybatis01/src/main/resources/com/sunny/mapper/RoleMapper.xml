@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunny.mapper.RoleMapper">
+    <!--引用namespace所指定的 mapper映射文件的缓存机制，执行增删改会清空指定 namespace 的缓存
+    例如:查询 Role后，执行了 user的增删改，那么再查 Role，Role的二级缓存就会失效，会直接查库
+    -->
+    <cache-ref namespace="com.sunny.mapper.UserMapper"/>
+
+    <resultMap id="role" type="com.sunny.pojo.Role">
+        <result property="role_id" column="role_id"></result>
+        <result property="role_name" column="role_name"></result>
+
+    </resultMap>
+    <resultMap id="roleUserDto" type="com.sunny.pojo.RoleUserDto" extends="role">
+        <collection property="users" ofType="com.sunny.pojo.User">
+            <result property="user_name" column="user_name"></result>
+        </collection>
+    </resultMap>
+
+    <!--一对多映射-->
+    <select id="queryRole" resultMap="roleUserDto">
+        SELECT
+            r.role_id,r.role_name ,u.user_name
+        FROM
+            Role r
+        LEFT JOIN USER u ON u.role_id = r.role_id
+        limit 0,5
+    </select>
+
+    <!--嵌套查询
+        1:一般情况 员工-角色多对一查询分页就满足了
+        2:当需要将role表中分页，将5个角色分为一页,那么例如 queryRole 在库中查询出 limit 0,5,那么查出来的5条数据，
+        可能有两条的数据是同一个角色，那么经过mybatis装配完成后，返回来的只有 4个角色的数据,所以没有实现按每页 5个角色
+        的需求来分页; 嵌套查询可以满足这点需求,参考 queryRole,queryRole2 的执行结果
+    -->
+    <resultMap id="roleUserDto2" type="com.sunny.pojo.RoleUserDto" extends="role">
+        <collection property="users" column="role_id" ofType="com.sunny.pojo.User" select="com.sunny.mapper.UserMapper.getUser">
+            <result property="user_name" column="user_name"></result>
+        </collection>
+    </resultMap>
+    <select id="queryRole2" resultMap="roleUserDto2">
+        SELECT * FROM Role limit 0,5
+    </select>
+
+
+
+</mapper>

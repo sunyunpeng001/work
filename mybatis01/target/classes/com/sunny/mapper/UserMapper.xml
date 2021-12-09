@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunny.mapper.UserMapper">
+    <cache></cache>
+    <resultMap id="userRoleDto" type="com.sunny.pojo.UserRoleDto"></resultMap>
+    <!--多对一映射-->
+    <select id="queryUser" resultMap="userRoleDto">
+        SELECT
+            u.*, r.role_name
+        FROM
+            USER u
+        LEFT JOIN Role r ON u.role_id = r.role_id
+    </select>
+
+    <!--嵌套查询使用-->
+    <select id="getUser" resultMap="userRoleDto">
+        SELECT * from USER where role_id = #{role_id}
+    </select>
+
+
+
+</mapper>
